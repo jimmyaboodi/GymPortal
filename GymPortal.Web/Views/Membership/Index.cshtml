@@ -1,0 +1,54 @@
+﻿@model GymPortal.Domain.Entities.Membership
+
+<h1>Mitt Medlemskap</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (Model == null)
+{
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Inget aktivt medlemskap</h5>
+            <p class="card-text">Du har just nu inget medlemskap hos oss. Skaffa ett för att kunna boka pass!</p>
+            <form asp-controller="Membership" asp-action="Create" method="post">
+                <input type="hidden" name="type" value="Standard" />
+                <button type="submit" class="btn btn-success">Bli medlem (Standard)</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Aktivt medlemskap: @Model.Type</h5>
+            <p class="card-text">Giltigt från: @Model.StartDate.ToString("yyyy-MM-dd")</p>
+            <p class="card-text">Giltigt till: @Model.EndDate.ToString("yyyy-MM-dd")</p>
+        </div>
+    </div>
+}
+
+<hr class="mt-5" />
+
+<div class="card border-danger mb-3">
+    <div class="card-header text-danger">Farlig zon</div>
+    <div class="card-body">
+        <h5 class="card-title">Radera konto</h5>
+        <p class="card-text">Om du raderar ditt konto försvinner all din data, inklusive bokningar och medlemskap. Detta går inte att ångra.</p>
+        <form asp-controller="Membership" asp-action="DeleteAccount" method="post" onsubmit="return confirm('Är du helt säker på att du vill radera ditt konto och all data?');">
+            <button type="submit" class="btn btn-danger">Radera mitt konto permanent</button>
+        </form>
+    </div>
+</div>

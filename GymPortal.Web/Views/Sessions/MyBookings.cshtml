@@ -1,0 +1,50 @@
+﻿@model IEnumerable<GymPortal.Domain.Entities.Booking>
+
+<h1>Mina bokade träningspass</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <p>Du har inte bokat några pass ännu.</p>
+}
+else
+{
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Pass</th>
+                <th>Datum och Tid</th>
+                <th>Instruktör</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model)
+            {
+                <tr>
+                    <td>@booking.Session.Name</td>
+                    <td>@booking.Session.DateAndTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@booking.Session.Instructor</td>
+                    <td>
+                        <form asp-controller="Sessions" asp-action="Cancel" asp-route-id="@booking.Session.Id" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm">Avboka</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
